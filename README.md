@@ -53,8 +53,8 @@ Use the slash command in Discord:
 
 The bot replies with an embed including:
 
-- Character avatar
-- Character name, level, and class
+- Character name and class with avatar icon (as author)
+- Full-body character thumbnail image
 - Item level
 - Active specialization
 - Number of mounts collected
