@@ -34,15 +34,19 @@ export default {
     try {
       const profile = await getCharacterProfile(region, realm, name);
       const media = await getCharacterMedia(region, realm, name);
+      const avatar = media.assets.find((a) => a.key === "avatar")?.value;
+      const inset = media.assets.find((a) => a.key === "inset")?.value;
+      const mainRaw = media.assets.find((a) => a.key === "main-raw")?.value;
       const specs = await getCharacterSpecializations(region, realm, name);
       const achievements = await getCharacterAchievements(region, realm, name);
       const mounts = await getCharacterMounts(region, realm, name);
 
       const embed = new EmbedBuilder()
-        .setTitle(
-          `${profile.name} - ${profile.level} ${profile.character_class.name}`
-        )
-        .setThumbnail(media.avatar_url)
+        .setAuthor({
+          name: `${profile.name} - ${profile.level} ${profile.character_class.name}`,
+          iconURL: avatar,
+        })
+        .setThumbnail(mainRaw) // Veća slika lika (umesto `media.avatar_url`)
         .addFields(
           {
             name: "Item Level",
