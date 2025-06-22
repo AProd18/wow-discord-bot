@@ -40,6 +40,9 @@ export default {
       const specs = await getCharacterSpecializations(region, realm, name);
       const achievements = await getCharacterAchievements(region, realm, name);
       const mounts = await getCharacterMounts(region, realm, name);
+      const gladiatorAchv = achievements.achievements.find((ach) =>
+        ach.achievement.name.toLowerCase().includes("gladiator")
+      );
 
       const embed = new EmbedBuilder()
         .setAuthor({
@@ -71,6 +74,24 @@ export default {
           {
             name: "Latest Achievement",
             value: achievements.achievements[0]?.achievement?.name ?? "None",
+          },
+          {
+            name: "Gladiator",
+            value: gladiatorAchv
+              ? `${gladiatorAchv.achievement.name} (${new Date(
+                  gladiatorAchv.completed_timestamp
+                ).toLocaleDateString()})`
+              : "No Gladiator achievements",
+          },
+          {
+            name: "Honor Level",
+            value: `${profile.honor_level}`, // Ovo već dobijaš iz getCharacterProfile
+            inline: true,
+          },
+          {
+            name: "Total Honorable Kills",
+            value: `${profile.honorable_kills}`,
+            inline: true,
           }
         )
         .setColor(0x00ae86)
