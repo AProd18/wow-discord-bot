@@ -46,7 +46,7 @@ export default {
           name: `${profile.name} - ${profile.level} ${profile.character_class.name}`,
           iconURL: avatar,
         })
-        .setThumbnail(mainRaw) // Veća slika lika (umesto `media.avatar_url`)
+        .setThumbnail(mainRaw)
         .addFields(
           {
             name: "Item Level",
@@ -61,6 +61,11 @@ export default {
           {
             name: "Mounts",
             value: `${mounts.mounts.length} collected`,
+            inline: true,
+          },
+          {
+            name: "Achievement Points",
+            value: `${profile.achievement_points}`,
             inline: true,
           },
           {

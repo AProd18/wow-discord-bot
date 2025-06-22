@@ -13,7 +13,6 @@ config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 
-// učitavanje komandi
 const commandFiles = fs
   .readdirSync(commandsPath)
   .filter((file) => file.endsWith(".js"));
@@ -22,7 +21,6 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
-// eventovi
 client.once(Events.ClientReady, (c) => {
   console.log(`Bot online as ${c.user.tag}`);
 });
