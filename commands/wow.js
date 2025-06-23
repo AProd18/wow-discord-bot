@@ -28,21 +28,26 @@ export default {
   async execute(interaction) {
     const name = interaction.options.getString("name");
     const realm = interaction.options.getString("realm");
+    const realmSlug = realm.toLowerCase().replace(/ /g, "-");
     const region = interaction.options.getString("region");
-    const pvp = await getCharacterPvpSummary(region, realm, name);
+    const pvp = await getCharacterPvpSummary(region, realmSlug, name);
 
     await interaction.deferReply();
 
     try {
-      const profile = await getCharacterProfile(region, realm, name);
+      const profile = await getCharacterProfile(region, realmSlug, name);
       console.log(profile);
-      const media = await getCharacterMedia(region, realm, name);
+      const media = await getCharacterMedia(region, realmSlug, name);
       const avatar = media.assets.find((a) => a.key === "avatar")?.value;
       const inset = media.assets.find((a) => a.key === "inset")?.value;
       const mainRaw = media.assets.find((a) => a.key === "main-raw")?.value;
-      const specs = await getCharacterSpecializations(region, realm, name);
-      const achievements = await getCharacterAchievements(region, realm, name);
-      const mounts = await getCharacterMounts(region, realm, name);
+      const specs = await getCharacterSpecializations(region, realmSlug, name);
+      const achievements = await getCharacterAchievements(
+        region,
+        realmSlug,
+        name
+      );
+      const mounts = await getCharacterMounts(region, realmSlug, name);
       const gladiatorAchv = achievements.achievements.find((ach) =>
         ach.achievement.name.toLowerCase().includes("gladiator")
       );
