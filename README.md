@@ -3,6 +3,8 @@
 A Discord bot built with discord.js that integrates with a custom [WoW API SDK](https://www.npmjs.com/package/wow-api-sdk?activeTab=readme) to fetch and display World of Warcraft character information via slash commands.
 Get instant info about your WoW characters right inside Discord — including profile, item level, active specialization, mounts, and achievements.
 
+![Bot Demo](./image1.png)
+
 ## Features
 
 - Slash command `/wow` to query character data by name, realm, and region
