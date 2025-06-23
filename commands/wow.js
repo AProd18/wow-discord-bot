@@ -5,6 +5,7 @@ import {
   getCharacterSpecializations,
   getCharacterAchievements,
   getCharacterMounts,
+  getCharacterPvpSummary,
 } from "wow-api-sdk";
 
 export default {
@@ -28,11 +29,13 @@ export default {
     const name = interaction.options.getString("name");
     const realm = interaction.options.getString("realm");
     const region = interaction.options.getString("region");
+    const pvp = await getCharacterPvpSummary(region, realm, name);
 
     await interaction.deferReply();
 
     try {
       const profile = await getCharacterProfile(region, realm, name);
+      console.log(profile);
       const media = await getCharacterMedia(region, realm, name);
       const avatar = media.assets.find((a) => a.key === "avatar")?.value;
       const inset = media.assets.find((a) => a.key === "inset")?.value;
@@ -85,12 +88,12 @@ export default {
           },
           {
             name: "Honor Level",
-            value: `${profile.honor_level}`, // Ovo već dobijaš iz getCharacterProfile
+            value: `${pvp.honor_level}`,
             inline: true,
           },
           {
             name: "Total Honorable Kills",
-            value: `${profile.honorable_kills}`,
+            value: `${pvp.honorable_kills}`,
             inline: true,
           }
         )
