@@ -49,11 +49,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
           const achievements = await getCharacterAchievements(
             region,
             realm,
-            name
+            name,
           );
 
           const gladiatorAchv = achievements.achievements.find((ach) =>
-            ach.achievement.name.toLowerCase().includes("gladiator")
+            ach.achievement.name.toLowerCase().includes("gladiator"),
           );
 
           const { EmbedBuilder } = await import("discord.js");
@@ -75,10 +75,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 name: "Gladiator",
                 value: gladiatorAchv
                   ? `${gladiatorAchv.achievement.name} (${new Date(
-                      gladiatorAchv.completed_timestamp
+                      gladiatorAchv.completed_timestamp,
                     ).toLocaleDateString()})`
                   : "No Gladiator achievements",
-              }
+              },
             )
             .setFooter({ text: `${realm} (${region})` });
 

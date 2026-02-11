@@ -13,16 +13,16 @@ export default {
     .setName("wow")
     .setDescription("Get WoW character info")
     .addStringOption((option) =>
-      option.setName("name").setDescription("Character name").setRequired(true)
+      option.setName("name").setDescription("Character name").setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("realm").setDescription("Realm name").setRequired(true)
+      option.setName("realm").setDescription("Realm name").setRequired(true),
     )
     .addStringOption((option) =>
       option
         .setName("region")
         .setDescription("Region (e.g. eu, us)")
-        .setRequired(true)
+        .setRequired(true),
     ),
 
   async execute(interaction) {
@@ -45,11 +45,11 @@ export default {
       const achievements = await getCharacterAchievements(
         region,
         realmSlug,
-        name
+        name,
       );
       const mounts = await getCharacterMounts(region, realmSlug, name);
       const gladiatorAchv = achievements.achievements.find((ach) =>
-        ach.achievement.name.toLowerCase().includes("gladiator")
+        ach.achievement.name.toLowerCase().includes("gladiator"),
       );
 
       const embed = new EmbedBuilder()
@@ -87,7 +87,7 @@ export default {
             name: "Gladiator",
             value: gladiatorAchv
               ? `${gladiatorAchv.achievement.name} (${new Date(
-                  gladiatorAchv.completed_timestamp
+                  gladiatorAchv.completed_timestamp,
                 ).toLocaleDateString()})`
               : "No Gladiator achievements",
           },
@@ -100,7 +100,7 @@ export default {
             name: "Total Honorable Kills",
             value: `${pvp.honorable_kills}`,
             inline: true,
-          }
+          },
         )
         .setColor(0x00ae86)
         .setFooter({ text: `${realm} (${region})` });
@@ -109,7 +109,7 @@ export default {
     } catch (err) {
       console.error(err);
       await interaction.editReply(
-        "Failed to fetch character info. Please check name/realm/region."
+        "Failed to fetch character info. Please check name/realm/region.",
       );
     }
   },

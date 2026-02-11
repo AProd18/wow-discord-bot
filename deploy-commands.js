@@ -20,6 +20,9 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
+console.log("Commands to register:");
+console.log(commands.map((c) => c.name));
+
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
 try {
