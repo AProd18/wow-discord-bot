@@ -8,13 +8,11 @@ import {
 
 async function fetchCharacter(region, realm, name) {
   const realmSlug = realm.toLowerCase().replace(/ /g, "-");
-
   const profile = await getCharacterProfile(region, realmSlug, name);
   const pvp = await getCharacterPvpSummary(region, realmSlug, name);
   const mounts = await getCharacterMounts(region, realmSlug, name);
   const achievements = await getCharacterAchievements(region, realmSlug, name);
 
-  // Proveri da li postoji Gladiator achievement
   const gladiatorAchv = achievements.achievements.find((ach) =>
     ach.achievement.name.toLowerCase().includes("gladiator"),
   );
@@ -28,16 +26,16 @@ async function fetchCharacter(region, realm, name) {
     honorLevel: pvp.honor_level,
     honorableKills: pvp.honorable_kills,
     mounts: mounts.mounts.length,
-    gladiator: gladiatorAchv ? "Yes 🟢" : "No ❌", // ovo je nova polja
+    gladiator: gladiatorAchv ? "Yes 🟢" : "No ❌",
   };
 }
 
-function formatComparison(statName, value1, value2) {
-  if (typeof value1 === "number" && typeof value2 === "number") {
-    if (value1 > value2) return [`${value1} 🟢`, `${value2}`];
-    if (value2 > value1) return [`${value1}`, `${value2} 🟢`];
+function formatComparison(val1, val2) {
+  if (typeof val1 === "number" && typeof val2 === "number") {
+    if (val1 > val2) return [`${val1} 🟢`, `${val2} ❌`];
+    if (val2 > val1) return [`${val1} ❌`, `${val2} 🟢`];
   }
-  return [String(value1), String(value2)];
+  return [val1, val2];
 }
 
 export default {
@@ -96,54 +94,80 @@ export default {
       const char1 = await fetchCharacter(region1, realm1, name1);
       const char2 = await fetchCharacter(region2, realm2, name2);
 
-      const [ilvl1, ilvl2] = formatComparison("ilvl", char1.ilvl, char2.ilvl);
+      const [ilvl1, ilvl2] = formatComparison(char1.ilvl, char2.ilvl);
       const [ach1, ach2] = formatComparison(
-        "achievements",
         char1.achievementPoints,
         char2.achievementPoints,
       );
       const [honor1, honor2] = formatComparison(
-        "honor",
         char1.honorLevel,
         char2.honorLevel,
       );
       const [kills1, kills2] = formatComparison(
-        "kills",
         char1.honorableKills,
         char2.honorableKills,
       );
-      const [mounts1, mounts2] = formatComparison(
-        "mounts",
-        char1.mounts,
-        char2.mounts,
-      );
-      // gladiator je već Yes/No sa emoji
+      const [mounts1, mounts2] = formatComparison(char1.mounts, char2.mounts);
       const [gladiator1, gladiator2] = [char1.gladiator, char2.gladiator];
 
       const embed = new EmbedBuilder()
-        .setTitle("⚔️ Character Comparison")
+        .setTitle("⚔️ WoW Character Comparison")
         .setDescription(
-          `**${char1.name}** (${realm1} - ${region1})\nvs\n**${char2.name}** (${realm2} - ${region2})`,
+          `Comparing **${char1.name}** (${realm1} - ${region1}) vs **${char2.name}** (${realm2} - ${region2})`,
         )
+        .setColor(0x992d22)
         .addFields(
+          // Item & Achievement Section
           {
-            name: "Stat",
-            value:
-              "Item Level\nAchievement Points\nHonor Level\nHonorable Kills\nMounts\nGladiator",
+            name: "📊 Gear & Progress",
+            value: "**Item Level**\n**Achievement Points**",
             inline: true,
           },
           {
             name: char1.name,
-            value: `${ilvl1}\n${ach1}\n${honor1}\n${kills1}\n${mounts1}\n${gladiator1}`,
+            value: `${ilvl1}\n${ach1}`,
             inline: true,
           },
           {
             name: char2.name,
-            value: `${ilvl2}\n${ach2}\n${honor2}\n${kills2}\n${mounts2}\n${gladiator2}`,
+            value: `${ilvl2}\n${ach2}`,
             inline: true,
           },
-        )
-        .setColor(0x992d22);
+
+          // PvP Section
+          {
+            name: "⚔️ PvP Stats",
+            value: "**Honor Level**\n**Honorable Kills**",
+            inline: true,
+          },
+          {
+            name: char1.name,
+            value: `${honor1}\n${kills1}`,
+            inline: true,
+          },
+          {
+            name: char2.name,
+            value: `${honor2}\n${kills2}`,
+            inline: true,
+          },
+
+          // Misc Section
+          {
+            name: "🏆 Misc",
+            value: "**Mounts Collected**\n**Gladiator**",
+            inline: true,
+          },
+          {
+            name: char1.name,
+            value: `${mounts1}\n${gladiator1}`,
+            inline: true,
+          },
+          {
+            name: char2.name,
+            value: `${mounts2}\n${gladiator2}`,
+            inline: true,
+          },
+        );
 
       await interaction.editReply({ embeds: [embed] });
     } catch (err) {
