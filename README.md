@@ -4,6 +4,7 @@ A Discord bot built with discord.js that integrates with a custom [WoW API SDK](
 Get instant info about your WoW characters right inside Discord — including profile, item level, active specialization, mounts, and achievements.
 
 ![Bot Demo](./image1.png)
+![Bot Demo](./image2.png)
 
 ## Features
 
