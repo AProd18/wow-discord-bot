@@ -1,9 +1,9 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import {
   getCharacterProfile,
-  getCharacterPvpSummary,
+  getCharacterAchievements,
   getCharacterMounts,
-  getCharacterSpecializations,
+  getCharacterPvpSummary,
 } from "wow-api-sdk";
 
 async function fetchCharacter(region, realm, name) {
@@ -12,7 +12,12 @@ async function fetchCharacter(region, realm, name) {
   const profile = await getCharacterProfile(region, realmSlug, name);
   const pvp = await getCharacterPvpSummary(region, realmSlug, name);
   const mounts = await getCharacterMounts(region, realmSlug, name);
-  const specs = await getCharacterSpecializations(region, realmSlug, name);
+  const achievements = await getCharacterAchievements(region, realmSlug, name);
+
+  // Proveri da li postoji Gladiator achievement
+  const gladiatorAchv = achievements.achievements.find((ach) =>
+    ach.achievement.name.toLowerCase().includes("gladiator"),
+  );
 
   return {
     name: profile.name,
@@ -23,7 +28,7 @@ async function fetchCharacter(region, realm, name) {
     honorLevel: pvp.honor_level,
     honorableKills: pvp.honorable_kills,
     mounts: mounts.mounts.length,
-    spec: specs.active_specialization.name,
+    gladiator: gladiatorAchv ? "Yes 🟢" : "No ❌", // ovo je nova polja
   };
 }
 
@@ -112,6 +117,8 @@ export default {
         char1.mounts,
         char2.mounts,
       );
+      // gladiator je već Yes/No sa emoji
+      const [gladiator1, gladiator2] = [char1.gladiator, char2.gladiator];
 
       const embed = new EmbedBuilder()
         .setTitle("⚔️ Character Comparison")
@@ -122,17 +129,17 @@ export default {
           {
             name: "Stat",
             value:
-              "Item Level\nAchievement Points\nHonor Level\nHonorable Kills\nMounts\nActive Spec",
+              "Item Level\nAchievement Points\nHonor Level\nHonorable Kills\nMounts\nGladiator",
             inline: true,
           },
           {
             name: char1.name,
-            value: `${ilvl1}\n${ach1}\n${honor1}\n${kills1}\n${mounts1}\n${char1.spec}`,
+            value: `${ilvl1}\n${ach1}\n${honor1}\n${kills1}\n${mounts1}\n${gladiator1}`,
             inline: true,
           },
           {
             name: char2.name,
-            value: `${ilvl2}\n${ach2}\n${honor2}\n${kills2}\n${mounts2}\n${char2.spec}`,
+            value: `${ilvl2}\n${ach2}\n${honor2}\n${kills2}\n${mounts2}\n${gladiator2}`,
             inline: true,
           },
         )
