@@ -71,13 +71,13 @@ The bot replies with an embed including:
 /wow-compare
 The bot replies with a side-by-side comparison embed including:
 
-Stat Player 1 Player 2
-Item Level 200 🟢 195
-Achievement Points 2500 2600 🟢
-Honor Level 45 50 🟢
-Honorable Kills 500 480 🟢
-Mounts 120 🟢 110
-Gladiator Achievement Yes 🟢 No ❌
+-Stat Player 1 Player 2
+-Item Level 200 🟢 195
+-Achievement Points 2500 2600 🟢
+-Honor Level 45 50 🟢
+-Honorable Kills 500 480 🟢
+-Mounts 120 🟢 110
+-Gladiator Achievement Yes 🟢 No ❌
 
 ## How it works
 
